@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "shuriken_sg_addon:item/shuriken/shuriken_blade_1"
+  }
+}

@@ -1,0 +1,9 @@
+modLoader="javafml"
+loaderVersion="[4,)" # Specifica che serve NeoForge 21 o superiore
+license="MIT"
+[[mods]]
+modId="shuriken_sg_addon" # Deve coincidere AL 100% con il MOD_ID nel tuo codice Java
+version="1.0.0"
+displayName="Silent Gear Shuriken Addon"
+authors="Lelanto"
+description="Aggiunge gli Shuriken a Silent Gear per la 1.21.1!"

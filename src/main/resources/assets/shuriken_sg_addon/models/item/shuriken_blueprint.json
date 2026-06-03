@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "shuriken_sg_addon:item/blueprint",
+    "layer1": "shuriken_sg_addon:item/shuriken_blank"
+  }
+}

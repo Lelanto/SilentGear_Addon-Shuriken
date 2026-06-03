@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:gear_crafting",
+  "group": "shuriken_sg_addon:shuriken",
+  "category": "equipment",
+  "ingredients": [
+    { "item": "shuriken_sg_addon:shuriken_blueprint" },
+    { "item": "shuriken_sg_addon:shuriken_blade"},
+    { "item": "shuriken_sg_addon:shuriken_blade"},
+    { "item": "shuriken_sg_addon:shuriken_blade"},
+    { "item": "shuriken_sg_addon:shuriken_blade"}
+  ],
+  "result": {
+    "count": 1,
+    "id": "shuriken_sg_addon:shuriken"
+  }
+}

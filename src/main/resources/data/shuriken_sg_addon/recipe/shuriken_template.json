@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "shuriken_sg_addon:blueprints/shuriken",
+  "pattern": [
+    " k ",
+    "kbk",
+    " k "
+  ],
+  "key": {
+    "b": {
+      "tag": "silentgear:template_boards"
+    },
+    "k": {
+      "item": "minecraft:flint"
+    }
+  },
+  "result": {
+    "id": "shuriken_sg_addon:shuriken_template",
+    "count": 1
+  }
+}
