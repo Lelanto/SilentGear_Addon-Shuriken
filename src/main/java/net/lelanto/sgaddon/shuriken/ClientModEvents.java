@@ -93,7 +93,7 @@ public class ClientModEvents {
             poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(spin));
             poseStack.scale(0.5f, 0.5f, 0.5f);
 
-            CURRENT_ENTITY.set(entity);
+            ShurikenRenderState.CURRENT_ENTITY.set(entity);
 
             itemRenderer.renderStatic(
                     renderStack,
@@ -106,7 +106,7 @@ public class ClientModEvents {
                     entity.getId()
             );
 
-            CURRENT_ENTITY.remove();
+            ShurikenRenderState.CURRENT_ENTITY.remove();
 
             poseStack.popPose();
 
@@ -121,5 +121,4 @@ public class ClientModEvents {
         }
     }
 
-    public static final ThreadLocal<SgShurikenEntity> CURRENT_ENTITY = new ThreadLocal<>();
 }

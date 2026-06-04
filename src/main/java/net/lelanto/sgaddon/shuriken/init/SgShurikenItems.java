@@ -1,10 +1,10 @@
 package net.lelanto.sgaddon.shuriken.init;
 
 import net.lelanto.sgaddon.shuriken.SgShurikenAddonMod;
+import net.lelanto.sgaddon.shuriken.item.SgShurikenBladeItem;
 import net.lelanto.sgaddon.shuriken.item.SgShurikenItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 
@@ -27,9 +27,9 @@ public final class SgShurikenItems {
     );
 
     /** One blade part; craft four (possibly with different materials) for final shuriken assembly. */
-    public static final DeferredItem<MainPartItem> SHURIKEN_BLADE = ITEMS.registerItem(
+    public static final DeferredItem<SgShurikenBladeItem> SHURIKEN_BLADE = ITEMS.registerItem(
             "shuriken_blade",
-            props -> new MainPartItem(SgShurikenGearTypes.SHURIKEN::value, props.stacksTo(64))
+            props -> new SgShurikenBladeItem(SgShurikenGearTypes.SHURIKEN::value, props)
     );
 
     private SgShurikenItems() {}

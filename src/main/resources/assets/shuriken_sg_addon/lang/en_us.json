@@ -3,5 +3,6 @@
   "item.shuriken_sg_addon.shuriken.nameProper": "%s Shuriken",
   "item.shuriken_sg_addon.shuriken_blade": "Shuriken Blade",
   "item.shuriken_sg_addon.shuriken_blade.nameProper": "%s Shuriken Blade",
-  "item.shuriken_sg_addon.blueprint.shuriken.desc": "Op Ranged Weapon"
+  "item.shuriken_sg_addon.blueprint.shuriken.desc": "Op Ranged Weapon",
+  "item.shuriken_sg_addon.shuriken.throw_damage": "Throw Damage: %s"
 }

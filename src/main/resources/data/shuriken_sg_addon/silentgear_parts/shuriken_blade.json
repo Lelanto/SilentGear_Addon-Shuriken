@@ -6,11 +6,16 @@
     "ingredient": {
       "item": "shuriken_sg_addon:shuriken_blade"
     },
-    "material_count": 1,
     "can_salvage": true,
     "gear_type_blacklist": []
   },
-  "properties": {},
+  "properties": {
+    "ranged_damage": {
+      "operation": "ADD",
+      "value": 0.25
+    },
+    "repair_efficiency": 1.0
+  },
   "display": {
     "name": {
       "translate": "part.shuriken_sg_addon.shuriken_blade"

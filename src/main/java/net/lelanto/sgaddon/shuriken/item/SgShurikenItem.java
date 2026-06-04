@@ -1,5 +1,6 @@
 package net.lelanto.sgaddon.shuriken.item;
 
+import net.lelanto.sgaddon.shuriken.ShurikenRenderState;
 import net.lelanto.sgaddon.shuriken.entity.SgShurikenEntity;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenEntityTypes;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenGearTypes;
@@ -17,9 +18,6 @@ import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.setup.gear.GearProperties;
-import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nonnull;
@@ -51,17 +49,10 @@ public class SgShurikenItem extends Item implements GearItem {
         }
 
         if (!level.isClientSide()) {
-            // 🎯 Prende il danno basato sulla media dei materiali E già modificato dal moltiplicatore del GearType
-            float finalDamage = GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE);
-
-            // Controllo di sicurezza: se il danno è nullo o negativo (es. materiali pessimi), imposta un minimo
-            if (finalDamage <= 0.0f) {
-                finalDamage = 0.5f;
-            }
-
+            float finalDamage = ShurikenDamage.computeThrowDamage(stack, getGearType());
             float finalVelocity = BASE_VELOCITY;
 
-            // Creazione del proiettile con il danno dinamico calcolato
+            // Projectile stores this value in baseDamage until impact (see SgShurikenEntity)
             SgShurikenEntity projectile = new SgShurikenEntity(
                     SgShurikenEntityTypes.SHURIKEN_PROJECTILE.get(),
                     level,
@@ -104,8 +95,12 @@ public class SgShurikenItem extends Item implements GearItem {
         super.appendHoverText(stack, context, tooltip, flag);
 
         if (GearHelper.isGear(stack)) {
-            // Gestisce in automatico la visualizzazione dei tratti e delle statistiche nell'inventario
             GearClientHelper.addInformation(stack, context, tooltip, flag);
+            float throwDamage = ShurikenDamage.computeThrowDamage(stack, getGearType());
+            tooltip.add(Component.translatable(
+                    "item.shuriken_sg_addon.shuriken.throw_damage",
+                    String.format("%.1f", throwDamage)
+            ));
         }
     }
 
@@ -117,22 +112,11 @@ public class SgShurikenItem extends Item implements GearItem {
     @Override
     public ItemColor getItemColors() {
         return (stack, tintIndex) -> {
-            if (tintIndex < 0 || tintIndex > 3 || !GearHelper.isGear(stack)) {
-                return -1;
+            SgShurikenEntity entity = ShurikenRenderState.CURRENT_ENTITY.get();
+            if (entity != null) {
+                return entity.getBladeColor(tintIndex);
             }
-
-            var construction = GearData.getConstruction(stack);
-            if (construction == null) {
-                return 0xFFFFFFFF;
-            }
-
-            var mainParts = construction.parts().getPartsOfType(PartTypes.MAIN.get());
-            if (tintIndex >= mainParts.size()) {
-                return 0xFFFFFFFF;
-            }
-
-            int color = mainParts.get(tintIndex).getColor(stack, tintIndex, 0);
-            return color != 0 ? (color | 0xFF000000) : 0xFFFFFFFF;
+            return ShurikenColors.getBladeColor(stack, tintIndex);
         };
     }
 }

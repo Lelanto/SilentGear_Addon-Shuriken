@@ -1,7 +1,8 @@
 plugins {
     java
-    // Versione del plugin di sviluppo di NeoForge
-    id("net.neoforged.gradle.userdev") version "7.0.165"
+    idea
+    // Version managed in settings.gradle.kts
+    id("net.neoforged.gradle.userdev")
 }
 
 // Mappatura automatica delle variabili dal gradle.properties
@@ -37,14 +38,33 @@ repositories {
     }
 }
 
+// Optional runtime mods (NeoForge convention); keeps them off published metadata.
+configurations {
+    runtimeClasspath.configure {
+        extendsFrom(configurations.named("localRuntime").get())
+    }
+}
+
 dependencies {
     implementation("net.neoforged:neoforge:${neoforge_version}")
 
-    // Silent Gear & Silent Lib via CurseMaven
-    implementation("curse.maven:silent-gear-${sg_project_id}:${sg_file_id}")
+    val silentGear = "curse.maven:silent-gear-${sg_project_id}:${sg_file_id}"
+    val silentLib = "curse.maven:silent-lib-${sl_project_id}:${sl_file_id}"
 
-    // Silent Lib (ID Progetto reale: 242998)
-    implementation("curse.maven:silent-lib-${sl_project_id}:${sl_file_id}")
+    // Compile + IDE classpath (CurseMaven coordinates from gradle.properties)
+    implementation(silentGear)
+    implementation(silentLib)
+
+    // Game runs only (same jars; required for NeoForge run configs)
+    "localRuntime"(silentGear)
+    "localRuntime"(silentLib)
+}
+
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
 }
 
 // ── BLOCCO FUNZIONANTE PER DIRE A MINECRAFT DI CARICARE I JSON IN SVILUPPO ──

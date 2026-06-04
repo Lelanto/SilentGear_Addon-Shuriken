@@ -10,8 +10,6 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.property.GearPropertyGroups;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 
-import static net.silentchaos512.gear.setup.gear.GearTypes.ALL;
-
 public final class SgShurikenGearTypes {
 
     private static final ResourceKey<Registry<GearType>> GEAR_TYPE_REGISTRY_KEY =
@@ -21,7 +19,7 @@ public final class SgShurikenGearTypes {
             DeferredRegister.create(GEAR_TYPE_REGISTRY_KEY, SgShurikenAddonMod.MOD_ID);
 
     public static final DeferredHolder<GearType, GearType> SHURIKEN =
-            GEAR_TYPES.register("shuriken", () -> GearType.Builder.of(GearTypes.ALL)
+            GEAR_TYPES.register("shuriken", () -> GearType.Builder.of(GearTypes.RANGED_WEAPON)
                     .relevantPropertyGroups(
                             GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.GENERAL,

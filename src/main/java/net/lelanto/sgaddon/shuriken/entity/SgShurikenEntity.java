@@ -1,6 +1,6 @@
 package net.lelanto.sgaddon.shuriken.entity;
 
-import net.lelanto.sgaddon.shuriken.init.SgShurikenGearTypes;
+import net.lelanto.sgaddon.shuriken.item.ShurikenColors;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,12 +19,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.gear.trait.Trait;
-import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -51,6 +46,7 @@ public class SgShurikenEntity extends AbstractArrow {
             new EntityDataAccessor[]{COLOR_0, COLOR_1, COLOR_2, COLOR_3};
 
     private ItemStack originalGearStack = ItemStack.EMPTY;
+    /** Sum of per-blade ranged_damage from {@link net.lelanto.sgaddon.shuriken.item.ShurikenDamage}, fixed at throw time. */
     private float baseDamage;
     @Nullable private UUID shooterUUID;
 
@@ -78,32 +74,16 @@ public class SgShurikenEntity extends AbstractArrow {
     }
 
     private void extractAndSyncColors(ItemStack gearStack) {
-        int fallback = 0xFFFFFFFF;
-        try {
-            var construction = GearData.getConstruction(gearStack);
-            if (construction == null) {
-                return;
-            }
-
-            GearType gearType = SgShurikenGearTypes.SHURIKEN.value();
-            PartType mainType = PartTypes.MAIN.get();
-            var mainParts = construction.parts().getPartsOfType(mainType);
-
-            for (int i = 0; i < 4; i++) {
-                int color = fallback;
-                if (i < mainParts.size()) {
-                    List<MaterialInstance> materials = mainParts.get(i).getMaterials();
-                    if (!materials.isEmpty()) {
-                        color = materials.getFirst().getColor(gearType, mainType) | 0xFF000000;
-                    }
-                }
-                this.entityData.set(COLORS[i], color);
-            }
-        } catch (Exception e) {
-            for (var acc : COLORS) {
-                this.entityData.set(acc, fallback);
-            }
+        for (int i = 0; i < 4; i++) {
+            this.entityData.set(COLORS[i], ShurikenColors.getBladeColor(gearStack, i));
         }
+    }
+
+    public int getBladeColor(int layer) {
+        if (layer < 0 || layer > 3) {
+            return 0xFFFFFFFF;
+        }
+        return this.entityData.get(COLORS[layer]);
     }
 
 

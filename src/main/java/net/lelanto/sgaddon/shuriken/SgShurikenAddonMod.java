@@ -1,5 +1,6 @@
 package net.lelanto.sgaddon.shuriken;
 
+import net.lelanto.sgaddon.shuriken.init.SgAddonRecipes;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenEntityTypes;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenGearTypes;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenItems;
@@ -18,6 +19,7 @@ public class SgShurikenAddonMod {
         SgShurikenGearTypes.GEAR_TYPES.register(modEventBus);
         SgShurikenItems.ITEMS.register(modEventBus);
         SgShurikenEntityTypes.ENTITY_TYPES.register(modEventBus);
+        SgAddonRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         modEventBus.addListener(this::addCreativeTabs);
     }
     private void addCreativeTabs(BuildCreativeModeTabContentsEvent event) {
