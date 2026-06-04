@@ -1,6 +1,0 @@
-[
-  {"version":2},
-  {"ingredient":{"id":"minecraft:bamboo_planks"},"type":"item_stack","bookmarkType":"INGREDIENT"},
-  {"ingredient":{"id":"silentgear:cord_blueprint"},"type":"item_stack","bookmarkType":"INGREDIENT"},
-  {"ingredient":{"id":"silentgear:rod_template"},"type":"item_stack","bookmarkType":"INGREDIENT"}
-]
