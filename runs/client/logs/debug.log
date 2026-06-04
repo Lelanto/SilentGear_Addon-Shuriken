@@ -5683,3 +5683,4 @@ This may indicate that these types of item need a subtype interpreter added to J
 [04giu2026 22:25:39.092] [Render thread/DEBUG] [mezz.jei.common.config.file.ConfigSerializer/]: Skipping loading config file, it was just saved by us: /home/unfamily/IdeaProjects/SilentGear_Addon-Shuriken/runs/client/config/jei/jei-client.ini
 [04giu2026 22:27:09.906] [Render thread/DEBUG] [mezz.jei.common.config.file.ConfigSerializer/]: Skipping loading config file, it was just saved by us: /home/unfamily/IdeaProjects/SilentGear_Addon-Shuriken/runs/client/config/jei/jei-mod-id-format.ini
 [04giu2026 22:30:29.512] [Server thread/DEBUG] [net.neoforged.neoforge.common.CommonHooks/WP]: Gathered mod list to write to world save New World
+[04giu2026 22:35:29.495] [Server thread/DEBUG] [net.neoforged.neoforge.common.CommonHooks/WP]: Gathered mod list to write to world save New World
