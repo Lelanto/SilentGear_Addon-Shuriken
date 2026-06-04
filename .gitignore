@@ -1,9 +1,10 @@
 .gradle
 build/
-runs
+runs/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+!**/src/main/**/runs/
 .kotlin
 
 ### IntelliJ IDEA ###
