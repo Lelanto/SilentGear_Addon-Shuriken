@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "shuriken_sg_addon:item/template",
-    "layer1": "shuriken_sg_addon:item/shuriken_blank"
-  }
-}

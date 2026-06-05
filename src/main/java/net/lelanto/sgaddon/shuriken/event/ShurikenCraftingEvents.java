@@ -9,7 +9,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@EventBusSubscriber(modid = SgShurikenAddonMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = SgShurikenAddonMod.MOD_ID)
 public final class ShurikenCraftingEvents {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ShurikenCraftingEvents.class);

@@ -1,9 +1,11 @@
-package net.lelanto.sgaddon.shuriken;
+package net.lelanto.sgaddon.shuriken.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.lelanto.sgaddon.shuriken.SgShurikenAddonMod;
 import net.lelanto.sgaddon.shuriken.entity.SgShurikenEntity;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenEntityTypes;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenItems;
+import net.lelanto.sgaddon.shuriken.render.ShurikenRenderState;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +19,6 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.util.GearHelper;
 
 @EventBusSubscriber(modid = SgShurikenAddonMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModEvents {
@@ -35,13 +36,11 @@ public class ClientModEvents {
         event.register(ClientModEvents::tintCompoundBlade, SgShurikenItems.SHURIKEN_BLADE.get());
     }
 
-    /** Use vanilla item model (4 layers); SG gear renderer tints all blades with one MAIN color. */
     @SubscribeEvent
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
         event.registerItem(IClientItemExtensions.DEFAULT, SgShurikenItems.SHURIKEN.get());
     }
 
-    /** Single blade part before assembly. */
     private static int tintCompoundBlade(ItemStack stack, int tintIndex) {
         if (tintIndex != 0) {
             return -1;

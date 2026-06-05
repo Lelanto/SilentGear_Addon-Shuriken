@@ -1,6 +1,6 @@
 package net.lelanto.sgaddon.shuriken.item;
 
-import net.lelanto.sgaddon.shuriken.ShurikenRenderState;
+import net.lelanto.sgaddon.shuriken.render.ShurikenRenderState;
 import net.lelanto.sgaddon.shuriken.entity.SgShurikenEntity;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenEntityTypes;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenGearTypes;
@@ -42,7 +42,6 @@ public class SgShurikenItem extends Item implements GearItem {
 
         ItemStack stack = player.getItemInHand(hand);
 
-        // Se lo shuriken è rotto, impedisci il lancio
         if (GearHelper.isBroken(stack)) {
             player.getCooldowns().addCooldown(this.asItem(), THROW_COOLDOWN);
             return InteractionResultHolder.fail(stack);
@@ -52,7 +51,6 @@ public class SgShurikenItem extends Item implements GearItem {
             float finalDamage = ShurikenDamage.computeThrowDamage(stack, getGearType());
             float finalVelocity = BASE_VELOCITY;
 
-            // Projectile stores this value in baseDamage until impact (see SgShurikenEntity)
             SgShurikenEntity projectile = new SgShurikenEntity(
                     SgShurikenEntityTypes.SHURIKEN_PROJECTILE.get(),
                     level,
@@ -80,7 +78,6 @@ public class SgShurikenItem extends Item implements GearItem {
                     0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f)
             );
 
-            // 🛠️ CORRETTO: Usa l'helper di Silent Gear per consumare la durabilità, rispettando i Tratti (es. Synergies, Brittle...)
             GearHelper.damageItem(stack, 1, player, slot -> {});
         }
 
@@ -98,7 +95,7 @@ public class SgShurikenItem extends Item implements GearItem {
             GearClientHelper.addInformation(stack, context, tooltip, flag);
             float throwDamage = ShurikenDamage.computeThrowDamage(stack, getGearType());
             tooltip.add(Component.translatable(
-                    "item.shuriken_sg_addon.shuriken.throw_damage",
+                    "item.sg_addon_shuriken.shuriken.throw_damage",
                     String.format("%.1f", throwDamage)
             ));
         }

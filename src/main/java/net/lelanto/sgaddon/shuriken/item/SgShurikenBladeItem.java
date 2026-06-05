@@ -10,9 +10,6 @@ import net.silentchaos512.gear.util.Const;
 import java.util.List;
 import java.util.function.Supplier;
 
-/**
- * Shuriken main blade part. Stacks to 1 and rejects silentgear:example-only material lists in crafting.
- */
 public class SgShurikenBladeItem extends MainPartItem {
 
     public SgShurikenBladeItem(Supplier<GearType> gearType, Properties properties) {
@@ -32,7 +29,6 @@ public class SgShurikenBladeItem extends MainPartItem {
         return materials.stream().noneMatch(m -> m.getId().equals(Const.Materials.EXAMPLE.getId()));
     }
 
-    /** A finished blade with real materials; must not be reused as a crafting ingredient. */
     public static boolean isCraftedBlade(ItemStack stack) {
         return stack.getItem() instanceof SgShurikenBladeItem && hasValidMaterial(stack);
     }

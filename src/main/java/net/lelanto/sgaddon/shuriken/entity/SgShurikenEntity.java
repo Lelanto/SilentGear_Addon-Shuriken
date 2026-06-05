@@ -20,7 +20,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.trait.Trait;
-import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 
@@ -176,7 +175,6 @@ public class SgShurikenEntity extends AbstractArrow {
         tag.putFloat(TAG_BASE_DAMAGE, baseDamage);
         if (shooterUUID != null) tag.putUUID(TAG_SHOOTER_UUID, shooterUUID);
 
-        // Salva i colori per ripristino dopo reload del chunk
         for (int i = 0; i < 4; i++) {
             tag.putInt("BladeColor" + i, this.entityData.get(COLORS[i]));
         }

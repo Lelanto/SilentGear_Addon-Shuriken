@@ -26,7 +26,6 @@ public final class SgShurikenItems {
             props -> new GearBlueprintItem(SgShurikenGearTypes.SHURIKEN::value, BlueprintType.TEMPLATE, props)
     );
 
-    /** One blade part; craft four (possibly with different materials) for final shuriken assembly. */
     public static final DeferredItem<SgShurikenBladeItem> SHURIKEN_BLADE = ITEMS.registerItem(
             "shuriken_blade",
             props -> new SgShurikenBladeItem(SgShurikenGearTypes.SHURIKEN::value, props)

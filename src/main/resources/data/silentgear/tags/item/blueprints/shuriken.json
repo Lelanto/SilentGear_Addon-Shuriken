@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "shuriken_sg_addon:shuriken_blueprint",
-    "shuriken_sg_addon:shuriken_template"
+    "sg_addon_shuriken:shuriken_blueprint",
+    "sg_addon_shuriken:shuriken_template"
   ]
 }

@@ -9,9 +9,6 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
-/**
- * Throw damage is the sum of each main blade's {@code ranged_damage}, not Silent Gear's gear-level average.
- */
 public final class ShurikenDamage {
 
     public static final float MIN_DAMAGE = 0.5f;
@@ -19,9 +16,7 @@ public final class ShurikenDamage {
 
     private ShurikenDamage() {}
 
-    /**
-     * Sum {@link GearProperties#RANGED_DAMAGE} from every main part on the stack.
-     */
+
     public static float computeThrowDamage(ItemStack stack, GearType gearType) {
         if (!GearHelper.isGear(stack)) {
             return MIN_DAMAGE;

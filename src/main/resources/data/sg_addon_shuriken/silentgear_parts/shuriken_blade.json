@@ -1,10 +1,10 @@
 {
   "type": "silentgear:core",
-  "gear_type": "shuriken_sg_addon:shuriken",
+  "gear_type": "sg_addon_shuriken:shuriken",
   "part_type": "silentgear:main",
   "crafting": {
     "ingredient": {
-      "item": "shuriken_sg_addon:shuriken_blade"
+      "item": "sg_addon_shuriken:shuriken_blade"
     },
     "can_salvage": true,
     "gear_type_blacklist": []
@@ -18,7 +18,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.shuriken_sg_addon.shuriken_blade"
+      "translate": "part.sg_addon_shuriken.shuriken_blade"
     },
     "name_prefix": ""
   }

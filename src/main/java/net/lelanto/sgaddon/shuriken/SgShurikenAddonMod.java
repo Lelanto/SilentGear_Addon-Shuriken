@@ -13,7 +13,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 @Mod(SgShurikenAddonMod.MOD_ID)
 public class SgShurikenAddonMod {
 
-    public static final String MOD_ID = "shuriken_sg_addon";
+    public static final String MOD_ID = "sg_addon_shuriken";
 
     public SgShurikenAddonMod(IEventBus modEventBus) {
         SgShurikenGearTypes.GEAR_TYPES.register(modEventBus);

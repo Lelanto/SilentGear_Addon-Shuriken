@@ -19,7 +19,7 @@ public final class SgShurikenEntityTypes {
                             .sized(0.5f, 0.5f)
                             .clientTrackingRange(4)
                             .updateInterval(20)
-                            .build("shuriken_sg_addon:shuriken_projectile")
+                            .build("sg_addon_shuriken:shuriken_projectile")
             );
 
     private SgShurikenEntityTypes() {}
