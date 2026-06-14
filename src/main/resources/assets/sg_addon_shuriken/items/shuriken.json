@@ -1,0 +1,24 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "sg_addon_shuriken:item/shuriken",
+    "tints": [
+      {
+        "type": "sg_addon_shuriken:shuriken_blade_layer",
+        "layer": 0
+      },
+      {
+        "type": "sg_addon_shuriken:shuriken_blade_layer",
+        "layer": 1
+      },
+      {
+        "type": "sg_addon_shuriken:shuriken_blade_layer",
+        "layer": 2
+      },
+      {
+        "type": "sg_addon_shuriken:shuriken_blade_layer",
+        "layer": 3
+      }
+    ]
+  }
+}

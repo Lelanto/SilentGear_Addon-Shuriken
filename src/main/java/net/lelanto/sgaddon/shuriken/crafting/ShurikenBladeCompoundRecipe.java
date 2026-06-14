@@ -3,9 +3,11 @@ package net.lelanto.sgaddon.shuriken.crafting;
 import net.lelanto.sgaddon.shuriken.init.SgAddonRecipes;
 import net.lelanto.sgaddon.shuriken.item.SgShurikenBladeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
@@ -17,16 +19,17 @@ import java.util.List;
 public class ShurikenBladeCompoundRecipe extends ShapelessCompoundPartRecipe {
 
     public ShurikenBladeCompoundRecipe(
-            String group,
-            CraftingBookCategory category,
-            ItemStack result,
-            net.minecraft.core.NonNullList<Ingredient> ingredients) {
-        super(group, category, result, ingredients);
+            Recipe.CommonInfo commonInfo,
+            CraftingRecipe.CraftingBookInfo bookInfo,
+            ItemStackTemplate result,
+            List<Ingredient> ingredients) {
+        super(commonInfo, bookInfo, result, ingredients);
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return SgAddonRecipes.SHURIKEN_BLADE_COMPOUND.get();
+    @SuppressWarnings("unchecked")
+    public RecipeSerializer<ShapelessCompoundPartRecipe> getSerializer() {
+        return (RecipeSerializer<ShapelessCompoundPartRecipe>) (RecipeSerializer<?>) SgAddonRecipes.SHURIKEN_BLADE_COMPOUND.get();
     }
 
     @Override

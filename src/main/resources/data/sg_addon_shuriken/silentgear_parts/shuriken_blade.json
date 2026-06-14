@@ -3,9 +3,7 @@
   "gear_type": "sg_addon_shuriken:shuriken",
   "part_type": "silentgear:main",
   "crafting": {
-    "ingredient": {
-      "item": "sg_addon_shuriken:shuriken_blade"
-    },
+    "ingredient": "sg_addon_shuriken:shuriken_blade",
     "can_salvage": true,
     "gear_type_blacklist": []
   },

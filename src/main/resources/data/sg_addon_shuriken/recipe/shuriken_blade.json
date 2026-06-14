@@ -3,18 +3,18 @@
   "category": "equipment",
   "ingredients": [
     {
-      "type": "silentgear:blueprint",
+      "neoforge:ingredient_type": "silentgear:blueprint",
       "gear_type": "sg_addon_shuriken:shuriken",
       "part_type": "silentgear:main"
     },
     {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "sg_addon_shuriken:shuriken",
       "part_type": "silentgear:main"
     }
   ],
   "result": {
-    "count": 1,
-    "id": "sg_addon_shuriken:shuriken_blade"
+    "id": "sg_addon_shuriken:shuriken_blade",
+    "count": 1
   }
 }

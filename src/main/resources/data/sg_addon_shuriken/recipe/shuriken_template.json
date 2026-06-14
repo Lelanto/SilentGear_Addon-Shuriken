@@ -8,12 +8,8 @@
     " k "
   ],
   "key": {
-    "b": {
-      "tag": "silentgear:template_boards"
-    },
-    "k": {
-      "item": "minecraft:flint"
-    }
+    "b": "#silentgear:template_boards",
+    "k": "minecraft:flint"
   },
   "result": {
     "id": "sg_addon_shuriken:shuriken_template",

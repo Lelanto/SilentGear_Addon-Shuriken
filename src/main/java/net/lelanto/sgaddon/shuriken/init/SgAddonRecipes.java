@@ -16,7 +16,7 @@ public final class SgAddonRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShurikenBladeCompoundRecipe>> SHURIKEN_BLADE_COMPOUND =
             RECIPE_SERIALIZERS.register(
                     "shuriken_blade_compound",
-                    () -> new ExtendedShapelessRecipe.BasicSerializer<>(ShurikenBladeCompoundRecipe::new)
+                    () -> ExtendedShapelessRecipe.basicSerializer(ShurikenBladeCompoundRecipe::new)
             );
 
     private SgAddonRecipes() {}

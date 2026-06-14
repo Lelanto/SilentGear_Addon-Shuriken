@@ -1,27 +1,25 @@
 package net.lelanto.sgaddon.shuriken.item;
 
-import net.lelanto.sgaddon.shuriken.render.ShurikenRenderState;
 import net.lelanto.sgaddon.shuriken.entity.SgShurikenEntity;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenEntityTypes;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenGearTypes;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearHelper;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.function.Consumer;
 
 public class SgShurikenItem extends Item implements GearItem {
 
@@ -33,18 +31,13 @@ public class SgShurikenItem extends Item implements GearItem {
         super(properties);
     }
 
-    @Nonnull
     @Override
-    public InteractionResultHolder<ItemStack> use(
-            @Nonnull Level level,
-            @Nonnull Player player,
-            @Nonnull InteractionHand hand) {
-
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
         if (GearHelper.isBroken(stack)) {
-            player.getCooldowns().addCooldown(this.asItem(), THROW_COOLDOWN);
-            return InteractionResultHolder.fail(stack);
+            player.getCooldowns().addCooldown(stack, THROW_COOLDOWN);
+            return InteractionResult.FAIL;
         }
 
         if (!level.isClientSide()) {
@@ -70,7 +63,8 @@ public class SgShurikenItem extends Item implements GearItem {
 
             level.addFreshEntity(projectile);
 
-            level.playSound(null,
+            level.playSound(
+                    null,
                     player.getX(), player.getY(), player.getZ(),
                     SoundEvents.SNOWBALL_THROW,
                     net.minecraft.sounds.SoundSource.PLAYERS,
@@ -81,20 +75,24 @@ public class SgShurikenItem extends Item implements GearItem {
             GearHelper.damageItem(stack, 1, player, slot -> {});
         }
 
-        player.awardStat(Stats.ITEM_USED.get(this.asItem()));
-        player.getCooldowns().addCooldown(this.asItem(), THROW_COOLDOWN);
+        player.awardStat(Stats.ITEM_USED.get(this));
+        player.getCooldowns().addCooldown(stack, THROW_COOLDOWN);
 
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nonnull TooltipContext context, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
-        super.appendHoverText(stack, context, tooltip, flag);
+    public void appendHoverText(
+            @NotNull ItemStack stack,
+            @NotNull TooltipContext context,
+            @NotNull TooltipDisplay display,
+            @NotNull Consumer<Component> tooltip,
+            @NotNull TooltipFlag flag) {
+        super.appendHoverText(stack, context, display, tooltip, flag);
 
         if (GearHelper.isGear(stack)) {
-            GearClientHelper.addInformation(stack, context, tooltip, flag);
             float throwDamage = ShurikenDamage.computeThrowDamage(stack, getGearType());
-            tooltip.add(Component.translatable(
+            tooltip.accept(Component.translatable(
                     "item.sg_addon_shuriken.shuriken.throw_damage",
                     String.format("%.1f", throwDamage)
             ));
@@ -104,16 +102,5 @@ public class SgShurikenItem extends Item implements GearItem {
     @Override
     public GearType getGearType() {
         return SgShurikenGearTypes.SHURIKEN.get();
-    }
-
-    @Override
-    public ItemColor getItemColors() {
-        return (stack, tintIndex) -> {
-            SgShurikenEntity entity = ShurikenRenderState.CURRENT_ENTITY.get();
-            if (entity != null) {
-                return entity.getBladeColor(tintIndex);
-            }
-            return ShurikenColors.getBladeColor(stack, tintIndex);
-        };
     }
 }

@@ -1,27 +1,39 @@
 package net.lelanto.sgaddon.shuriken.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.lelanto.sgaddon.shuriken.SgShurikenAddonMod;
+import net.lelanto.sgaddon.shuriken.client.color.ShurikenBladeLayerTint;
 import net.lelanto.sgaddon.shuriken.entity.SgShurikenEntity;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenEntityTypes;
 import net.lelanto.sgaddon.shuriken.init.SgShurikenItems;
-import net.lelanto.sgaddon.shuriken.render.ShurikenRenderState;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.lelanto.sgaddon.shuriken.render.ShurikenProjectileRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.item.CompoundPartItem;
 
-@EventBusSubscriber(modid = SgShurikenAddonMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ClientModEvents {
+@EventBusSubscriber(modid = SgShurikenAddonMod.MOD_ID, value = Dist.CLIENT)
+public final class ClientModEvents {
+
+    private ClientModEvents() {}
+
+    @SubscribeEvent
+    public static void registerItemTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
+        event.register(
+                Identifier.fromNamespaceAndPath(SgShurikenAddonMod.MOD_ID, "shuriken_blade_layer"),
+                ShurikenBladeLayerTint.CODEC
+        );
+    }
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -31,93 +43,55 @@ public class ClientModEvents {
         );
     }
 
-    @SubscribeEvent
-    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register(ClientModEvents::tintCompoundBlade, SgShurikenItems.SHURIKEN_BLADE.get());
-    }
+    public static class ShurikenRenderer extends EntityRenderer<SgShurikenEntity, ShurikenProjectileRenderState> {
 
-    @SubscribeEvent
-    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        event.registerItem(IClientItemExtensions.DEFAULT, SgShurikenItems.SHURIKEN.get());
-    }
-
-    private static int tintCompoundBlade(ItemStack stack, int tintIndex) {
-        if (tintIndex != 0) {
-            return -1;
-        }
-
-        if (stack.getItem() instanceof CompoundPartItem partItem) {
-            int color = partItem.getColor(stack, 0);
-            return color != 0 ? color : 0xFFFFFF;
-        }
-
-        PartInstance part = PartInstance.from(stack);
-        if (part != null) {
-            return colorFromPart(stack, part);
-        }
-
-        return 0xFFFFFF;
-    }
-
-    private static int colorFromPart(ItemStack context, PartInstance part) {
-        int color = part.getColor(context);
-        return color != 0 ? (color | 0xFF000000) : 0xFFFFFFFF;
-    }
-
-    public static class ShurikenRenderer
-            extends net.minecraft.client.renderer.entity.EntityRenderer<SgShurikenEntity> {
-
-        private static final float SPIN_SPEED = 45.0f;
-
-        private final net.minecraft.client.renderer.entity.ItemRenderer itemRenderer;
+        private final ItemModelResolver itemModelResolver;
 
         public ShurikenRenderer(EntityRendererProvider.Context context) {
             super(context);
-            this.itemRenderer = context.getItemRenderer();
+            this.itemModelResolver = context.getItemModelResolver();
+            this.shadowRadius = 0.0F;
         }
 
         @Override
-        public void render(SgShurikenEntity entity, float entityYaw,
-                           float partialTick, PoseStack poseStack,
-                           MultiBufferSource bufferSource, int packedLight) {
+        public ShurikenProjectileRenderState createRenderState() {
+            return new ShurikenProjectileRenderState();
+        }
+
+        @Override
+        public void extractRenderState(SgShurikenEntity entity, ShurikenProjectileRenderState state, float partialTicks) {
+            super.extractRenderState(entity, state, partialTicks);
 
             ItemStack renderStack = entity.getGearStackForRender();
             if (renderStack.isEmpty()) {
                 renderStack = new ItemStack(SgShurikenItems.SHURIKEN.get());
             }
 
-            poseStack.pushPose();
-
-            float spin = (entity.tickCount + partialTick) * SPIN_SPEED;
-            poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(spin));
-            poseStack.scale(0.5f, 0.5f, 0.5f);
-
-            ShurikenRenderState.CURRENT_ENTITY.set(entity);
-
-            itemRenderer.renderStatic(
-                    renderStack,
-                    net.minecraft.world.item.ItemDisplayContext.GROUND,
-                    packedLight,
-                    net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY,
-                    poseStack,
-                    bufferSource,
-                    entity.level(),
-                    entity.getId()
-            );
-
-            ShurikenRenderState.CURRENT_ENTITY.remove();
-
-            poseStack.popPose();
-
-            super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+            state.extractShurikenRenderState(entity, renderStack, this.itemModelResolver, partialTicks);
         }
 
         @Override
-        public ResourceLocation getTextureLocation(SgShurikenEntity entity) {
-            return ResourceLocation.fromNamespaceAndPath(
-                    SgShurikenAddonMod.MOD_ID, "textures/entity/shuriken.png"
-            );
+        public void submit(
+                ShurikenProjectileRenderState state,
+                PoseStack poseStack,
+                SubmitNodeCollector submitNodeCollector,
+                CameraRenderState camera) {
+
+            if (!state.item.isEmpty()) {
+                poseStack.pushPose();
+                poseStack.mulPose(Axis.ZP.rotationDegrees(state.spinDegrees));
+                poseStack.scale(0.5f, 0.5f, 0.5f);
+                state.item.submit(
+                        poseStack,
+                        submitNodeCollector,
+                        state.lightCoords,
+                        OverlayTexture.NO_OVERLAY,
+                        state.outlineColor
+                );
+                poseStack.popPose();
+            }
+
+            super.submit(state, poseStack, submitNodeCollector, camera);
         }
     }
-
 }

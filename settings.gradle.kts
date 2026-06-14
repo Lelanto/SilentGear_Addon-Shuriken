@@ -7,7 +7,7 @@ pluginManagement {
 }
 
 plugins {
-    id("net.neoforged.gradle.userdev") version "7.0.165"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 rootProject.name = "sgShurikenAddon"

@@ -8,12 +8,8 @@
     " k "
   ],
   "key": {
-    "b": {
-      "item": "silentgear:blueprint_paper"
-    },
-    "k": {
-      "item": "minecraft:flint"
-    }
+    "b": "#silentgear:blueprint_paper",
+    "k": "minecraft:flint"
   },
   "result": {
     "id": "sg_addon_shuriken:shuriken_blueprint",
