@@ -14,7 +14,7 @@ public final class SgShurikenItems {
             DeferredRegister.createItems(SgShurikenAddonMod.MOD_ID);
 
     public static final DeferredItem<SgShurikenItem> SHURIKEN =
-            ITEMS.registerItem("shuriken", SgShurikenItem::new);
+            ITEMS.registerItem("shuriken", SgShurikenItem::new, props -> props.stacksTo(1).enchantable(1));
 
     public static final DeferredItem<GearBlueprintItem> SHURIKEN_BLUEPRINT = ITEMS.registerItem(
             "shuriken_blueprint",
