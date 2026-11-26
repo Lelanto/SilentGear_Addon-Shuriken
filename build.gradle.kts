@@ -15,6 +15,10 @@ val sg_project_id: String by project
 val sg_file_id: String by project
 val sl_project_id: String by project
 val sl_file_id: String by project
+val dummy_project_id: String by project
+val dummy_file_id: String by project
+val moonlight_project_id: String by project
+val moonlight_file_id: String by project
 
 version = "$minecraft_version-$mod_version"
 group = mod_group
@@ -58,6 +62,8 @@ dependencies {
     // Game runs only (same jars; required for NeoForge run configs)
     "localRuntime"(silentGear)
     "localRuntime"(silentLib)
+    "localRuntime"("curse.maven:mmmmmmmmmmmm-${dummy_project_id}:${dummy_file_id}")
+    "localRuntime"("curse.maven:selene-${moonlight_project_id}:${moonlight_file_id}")
 }
 
 idea {
