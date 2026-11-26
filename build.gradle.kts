@@ -44,7 +44,11 @@ repositories {
 }
 
 neoForge {
-    version = neo_version
+    // Work around NeoForge 26.2 HolderSet recompile failure in createMinecraftArtifacts
+    enable {
+        version = neo_version
+        setDisableRecompilation(true)
+    }
 
     runs {
         create("client") {
