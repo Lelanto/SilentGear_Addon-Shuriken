@@ -1,5 +1,6 @@
 package net.lelanto.sgaddon.shuriken.entity;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.lelanto.sgaddon.shuriken.item.ShurikenColors;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -22,7 +24,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.gear.trait.Trait;
-import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +50,7 @@ public class SgShurikenEntity extends AbstractArrow {
     private ItemStack originalGearStack = ItemStack.EMPTY;
     private float baseDamage;
     @Nullable private UUID shooterUUID;
+    @Nullable private IntOpenHashSet piercedEntityIds;
 
     public SgShurikenEntity(EntityType<? extends SgShurikenEntity> type, Level level) {
         super(type, level);
@@ -113,6 +115,21 @@ public class SgShurikenEntity extends AbstractArrow {
             return;
         }
 
+        if (this.piercedEntityIds != null && this.piercedEntityIds.contains(target.getId())) {
+            return;
+        }
+
+        if (this.getPierceLevel() > 0) {
+            if (this.piercedEntityIds == null) {
+                this.piercedEntityIds = new IntOpenHashSet(5);
+            }
+            if (this.piercedEntityIds.size() >= this.getPierceLevel() + 1) {
+                this.discard();
+                return;
+            }
+            this.piercedEntityIds.add(target.getId());
+        }
+
         Player shooter = null;
         if (shooterUUID != null) {
             Entity ownerEntity = serverLevel.getEntity(shooterUUID);
@@ -126,16 +143,32 @@ public class SgShurikenEntity extends AbstractArrow {
                     ? serverLevel.damageSources().playerAttack(shooter)
                     : serverLevel.damageSources().magic();
 
-            livingTarget.hurt(source, baseDamage);
+            float damage = this.baseDamage;
+            ItemStack weapon = this.getWeaponItem();
+            if (weapon != null) {
+                damage = EnchantmentHelper.modifyDamage(serverLevel, weapon, livingTarget, source, damage);
+            }
+
+            if (this.isOnFire()) {
+                livingTarget.igniteForSeconds(5.0F);
+            }
+
+            livingTarget.hurt(source, damage);
+            this.doKnockback(livingTarget, source);
+
+            if (weapon != null) {
+                EnchantmentHelper.doPostAttackEffectsWithItemSource(serverLevel, livingTarget, source, weapon);
+            }
 
             if (!this.originalGearStack.isEmpty() && shooter != null) {
-                GearHelper.damageItem(this.originalGearStack, 1, shooter, stack -> {});
-                applyTraitsOnHit(this.originalGearStack, shooter, livingTarget, baseDamage);
+                applyTraitsOnHit(this.originalGearStack, shooter, livingTarget, damage);
             }
         }
 
         this.playSound(SoundEvents.ARROW_HIT, 1.0f, 1.2f);
-        this.discard();
+        if (this.getPierceLevel() <= 0) {
+            this.discard();
+        }
     }
 
     private void applyTraitsOnHit(

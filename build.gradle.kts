@@ -20,7 +20,6 @@ val sg_project_id: String by project
 val sg_file_id: String by project
 val sl_project_id: String by project
 val sl_file_id: String by project
-
 version = mod_version
 group = mod_group
 
